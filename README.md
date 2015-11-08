@@ -1,10 +1,4 @@
 TechTree
 =========
 
-Run the script to generate a dependency graph for courses of IIIT-D in DOT format
-
-Use the dot file to visualize the graph using any graphviz tool
-
-```
-$ dot -Tsvg graph.dot -o graph.svg
-```
+Just run the script by typing `$ python make_graph.py` to output the graph to `graph.svg`.

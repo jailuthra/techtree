@@ -1,7 +1,8 @@
 import urllib.request
 from bs4 import BeautifulSoup
-import networkx as nx
+# import networkx as nx
 # import matplotlib.pyplot as plt
+import pygraphviz as pgv
 
 class Course():
     prereq = []
@@ -69,12 +70,23 @@ for course in courses:
                 edges.append((pr, course))
 
 nodes = set([n1 for n1,n2 in edges] + [n2 for n1,n2 in edges])
-G = nx.DiGraph()
+
+### Commented for legacy purposes
+# G = nx.DiGraph()
+# for node in nodes:
+    # G.add_node(node)
+# for edge in edges:
+    # G.add_edge(edge[0], edge[1])
+# nx.write_dot(G, "graph.dot")
+
+# pos = nx.spring_layout(G)
+# nx.draw(G, pos)
+# plt.show()
+
+### Using pygraphviz library instead of networkx
+G = pgv.AGraph(directed=True)
 for node in nodes:
     G.add_node(node)
 for edge in edges:
     G.add_edge(edge[0], edge[1])
-nx.write_dot(G, "graph.dot")
-# pos = nx.spring_layout(G)
-# nx.draw(G, pos)
-# plt.show()
+G.draw(path='graph.svg', prog='dot')
