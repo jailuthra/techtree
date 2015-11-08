@@ -9,9 +9,9 @@ class Course():
         self.id = id
         self.title = title
     def __repr__(self):
-        return 'Course()'
+        return "<Course object>"
     def __str__(self):
-        return self.id + ' ' + self.title + ' Requires:' + ' '.join(self.prereq)
+        return self.id + '\n' + self.title
 
 with urllib.request.urlopen('http://sites.iiitd.ac.in/courserepo/') as res:
     html = res.read() 
@@ -61,7 +61,12 @@ edges = []
 for course in courses:
     if course.prereq != []:
         for pr in course.prereq:
-            edges.append((pr, course.id))
+            try:
+                pr_course = [p for p in courses if pr in p.id][0]
+                edges.append((pr_course, course))
+            except:
+                print(pr, '\'s course name not found')
+                edges.append((pr, course))
 
 nodes = set([n1 for n1,n2 in edges] + [n2 for n1,n2 in edges])
 G = nx.DiGraph()
