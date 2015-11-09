@@ -1,7 +1,5 @@
 import urllib.request
 from bs4 import BeautifulSoup
-# import networkx as nx
-# import matplotlib.pyplot as plt
 import pygraphviz as pgv
 
 class Course():
@@ -23,7 +21,6 @@ exTitle = lambda title: title.string.split('Title: ')[1][:-1]
 exId = lambda id: id.string.split('(')[0][:-1]
 exPRId = lambda pr_id: pr_id.string.strip(' ')
 
-# print(soup.prettify())
 titles = soup.find_all(attrs={'class': 'title'})
 ids = soup.find_all(attrs={'class': 'number'})
 
@@ -33,12 +30,6 @@ for id in ids:
     pr_row = id.parent.parent.next_sibling.next_sibling.next_sibling.next_sibling
     if 'Pre-requisite:' in str(pr_row):
         prereqs[exId(id)] = [exPRId(pr_id) for pr_id in pr_row.find_all('a')]
-
-# print(prereqs)
-
-
-# titles = [exTitle(title) for title in titles]
-# ids = [exId(id) for id in ids]
 
 titles = map(exTitle, titles)
 ids = map(exId, ids)
@@ -51,12 +42,9 @@ for t, i in zip(titles, ids):
         course.prereq = prereqs[i]
     courses.append(course)
 
-# for course in courses:
-    # print(course)
 
 # GRAPH
 
-#nodes = [course.id for course in courses]
 edges = []
 
 for course in courses:
@@ -89,4 +77,5 @@ for node in nodes:
     G.add_node(node)
 for edge in edges:
     G.add_edge(edge[0], edge[1])
+G.write('graph.dot')
 G.draw(path='graph.svg', prog='dot')
