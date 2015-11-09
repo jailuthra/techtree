@@ -10,7 +10,7 @@ class Course():
     def __repr__(self):
         return "<Course object>"
     def __str__(self):
-        return self.id + '\n' + self.title
+        return self.id + ': ' + self.title
 
 with urllib.request.urlopen('http://sites.iiitd.ac.in/courserepo/') as res:
     html = res.read() 
@@ -50,12 +50,7 @@ edges = []
 for course in courses:
     if course.prereq != []:
         for pr in course.prereq:
-            try:
-                pr_course = [p for p in courses if pr in p.id][0]
-                edges.append((pr_course, course))
-            except:
-                print(pr, '\'s course name not found')
-                edges.append((pr, course))
+            edges.append((pr, course.id))
 
 nodes = set([n1 for n1,n2 in edges] + [n2 for n1,n2 in edges])
 
@@ -74,7 +69,12 @@ nodes = set([n1 for n1,n2 in edges] + [n2 for n1,n2 in edges])
 ### Using pygraphviz library instead of networkx
 G = pgv.AGraph(directed=True)
 for node in nodes:
-    G.add_node(node)
+    node_object = next((c for c in courses if node in c.id), None)
+    if node_object:
+        label = node_object.id + '\n' + node_object.title
+    else:
+        label = node
+    G.add_node(node, label=label)
 for edge in edges:
     G.add_edge(edge[0], edge[1])
 G.write('graph.dot')
