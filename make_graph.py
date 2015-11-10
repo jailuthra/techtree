@@ -1,6 +1,8 @@
+import json
 import urllib.request
 from bs4 import BeautifulSoup
-# import networkx as nx
+import networkx as nx
+from networkx.readwrite import json_graph
 # import matplotlib.pyplot as plt
 import pygraphviz as pgv
 
@@ -83,10 +85,18 @@ nodes = set([n1 for n1,n2 in edges] + [n2 for n1,n2 in edges])
 # nx.draw(G, pos)
 # plt.show()
 
-### Using pygraphviz library instead of networkx
+# Using pygraphviz library instead of networkx
 G = pgv.AGraph(directed=True)
 for node in nodes:
     G.add_node(node)
 for edge in edges:
     G.add_edge(edge[0], edge[1])
+
+# Generating JSON from graph
+graph_json = json_graph.node_link_data(nx.from_agraph(G))
+
+with open('graph.json', 'w') as f:
+    json.dump(graph_json, f, indent=1)
+
+# Generating .svg from graph
 G.draw(path='graph.svg', prog='dot')
