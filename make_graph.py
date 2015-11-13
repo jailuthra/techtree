@@ -1,3 +1,4 @@
+import os
 import json
 import urllib.request
 from bs4 import BeautifulSoup
@@ -69,7 +70,7 @@ nodes = set([n1 for n1,n2 in edges] + [n2 for n1,n2 in edges])
 # nx.draw(G, pos)
 # plt.show()
 
-# Using pygraphviz library to generate svg and dot file
+# Using pygraphviz library to generate basic dot file
 G = pgv.AGraph(directed=True)
 for node in nodes:
     node_object = next((c for c in courses if node in c.id), None)
@@ -82,11 +83,19 @@ for edge in edges:
     G.add_edge(edge[0], edge[1])
 G.write('graph.dot')
 
-# Generating JSON from graph
-graph_json = json_graph.node_link_data(nx.from_agraph(G))
+# Generating basic .svg from graph
+# G.draw(path='basic_graph.svg', prog='dot')
 
+# Generating .dot with coordinate information for nodes
+os.system("ccomps -x graph.dot | dot -Nshape=point -Granksep=1.0 -Gnodesep=1.0 -Gsize=10 | gvpack -array1 | neato -Tdot -n2 -o graphcoord.dot")
+
+# Generating JSON from graph with coordinates
+G = pgv.AGraph('graphcoord.dot')
+nx_G = nx.from_agraph(G)
+graph_json = json_graph.node_link_data(nx_G)
 with open('graph.json', 'w') as f:
     json.dump(graph_json, f, indent=1)
 
-# Generating .svg from graph
-G.draw(path='graph.svg', prog='dot')
+# Cleaning up
+os.remove('graph.dot')
+os.remove('graphcoord.dot')
