@@ -1,0 +1,29 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head>
+<style>
+    .course-check {
+        font-size: 1em;
+    }
+</style>
+	<link rel="stylesheet" type="text/css" href="{% static "webapp/css/bootstrap.css" %}">
+</head>
+
+<body>
+    <div class="container">
+        <h1 style="text-align:center;">TechTree</h1>
+        <h3>Select courses: </h3>
+        <form action="/subgraph/" method="post">
+        {% for course in courses %}
+			{% csrf_token %}
+            <div class="form-group">
+                <label class="course-check"><input type="checkbox" name="course" value="{{ course.id }}">
+                {{ course.id }} - {{ course.title }}</label>
+            </div>
+        {% endfor %}
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</body>

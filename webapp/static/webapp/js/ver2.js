@@ -1,4 +1,4 @@
-var width = 1600,
+var width = 3600,
     height = 1000;
 
 var svg = d3.select("body").append("svg")
@@ -19,7 +19,7 @@ svg.append("defs").selectAll("marker")
     .append("path")
     .attr("d", "M0,-5L10,0L0,5");
 
-d3.json("graph.json", function(error, graph) {
+d3.json("/static/webapp/graph.json", function(error, graph) {
     if (error) throw error;
 
     function assignXY() {
@@ -27,9 +27,11 @@ d3.json("graph.json", function(error, graph) {
             d = graph.nodes[i];
             posArr = d.pos.split(',')
             console.log(posArr);
-            scale = 0.50
-            offset = 50
+            scale = 1
+            offset = 50 + Math.floor(Math.random() * 30) - 15
             d.x = parseInt(posArr[0], 10)*scale + offset;
+            scale = 0.8 
+            offset = 100 + Math.floor(Math.random() * 50) - 25
             d.y = (height - parseInt(posArr[1], 10))*scale + offset;
             d.px = d.x
             d.py = d.y
