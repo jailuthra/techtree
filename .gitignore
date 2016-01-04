@@ -2,7 +2,4 @@
 *.pyc
 venv
 staticfiles
-*.svg
-*.json
-*.dot
 local_settings.py
