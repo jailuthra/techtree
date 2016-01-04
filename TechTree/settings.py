@@ -118,11 +118,12 @@ STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'webapp/static'),
+    os.path.join(BASE_DIR, 'TechTree/static'),
 )
 
 try:
     from local_settings import *
 except ImportError:
-    print("No local_settings.py found, using default settings")
+    # print("No local_settings.py found, using default settings")
+    pass
 
