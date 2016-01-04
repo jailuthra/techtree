@@ -39,7 +39,11 @@ for t, i in zip(titles, ids):
     course.save()
 
 for i in prereqs.keys():
-    course = Course.objects.get(id=i)
+    course = Course.objects.get(pk=i)
     for prereq in prereqs[i]:
-        course.prereq.add(prereq)
+        try:
+            pr = Course.objects.get(pk=prereq)
+            course.prereq.add(pr)
+        except django.core.exceptions.ObjectDoesNotExist:
+            print(prereq, "not found, skipping...")
     course.save()
