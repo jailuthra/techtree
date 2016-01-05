@@ -5,6 +5,9 @@ http://techtree.herokuapp.com/
 
 Visualize course prerequisites through graphs. Just select the courses you're interested in taking this semester and hit submit.
 
+TechTree uses **pygraphviz** to generate a DOT/SVG graph for the requests it recieves. Also there is a WIP **d3.js** port,
+which is running at [techtree.herokuapp.com/graph](http://techtree.herokuapp.com/graph).
+
 Contributing
 -------------
 
